@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -42,8 +41,4 @@ class Event extends BaseEntity{
     @Column(nullable = false)
     @NotNull
     private String location;
-
-    @Column(nullable = false)
-    @NotNull
-    private BigDecimal price;
 }
