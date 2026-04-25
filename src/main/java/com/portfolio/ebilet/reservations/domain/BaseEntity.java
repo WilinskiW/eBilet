@@ -1,5 +1,6 @@
 package com.portfolio.ebilet.reservations.domain;
 
+import com.fasterxml.uuid.Generators;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +28,7 @@ import java.util.UUID;
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID id = Generators.timeBasedEpochGenerator().generate(); // v7
 
     @Version
     @Column(nullable = false)
