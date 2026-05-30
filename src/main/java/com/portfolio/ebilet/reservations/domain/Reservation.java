@@ -10,7 +10,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -19,7 +18,6 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "reservations")
 @NoArgsConstructor
 @SuperBuilder
-@Getter(AccessLevel.PACKAGE)
 @Setter(AccessLevel.PACKAGE)
 class Reservation extends BaseEntity {
 

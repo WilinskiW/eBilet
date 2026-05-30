@@ -16,7 +16,7 @@ import java.time.Instant;
 @Table(name = "events")
 @NoArgsConstructor
 @SuperBuilder
-@Getter(AccessLevel.PACKAGE)
+@Getter
 @Setter(AccessLevel.PACKAGE)
 class Event extends BaseEntity{
 
