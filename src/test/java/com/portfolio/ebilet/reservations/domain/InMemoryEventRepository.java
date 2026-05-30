@@ -124,7 +124,9 @@ public class InMemoryEventRepository implements EventRepository{
 
     @Override
     public List<Event> findAll() {
-        return List.of();
+        return events.values()
+                .stream()
+                .toList();
     }
 
     @Override

@@ -44,4 +44,36 @@ public class ReservationFacadeTest {
                 .matches(e -> e.city().equals("Test city"))
                 .matches(e -> e.location().equals("Test location"));
     }
+
+    @Test
+    void should_get_all_events(){
+        // Given
+        givenEventExists("Test concert 1");
+        givenEventExists("Test concert 2");
+        givenEventExists("Test concert 3");
+
+        // When
+        var events = facade.getAllEvents();
+
+        // Then
+        assertThat(events)
+                .hasSize(3)
+                .extracting(EventDto::name)
+                .containsExactlyInAnyOrder("Test concert 1", "Test concert 2", "Test concert 3");
+    }
+
+    private void givenEventExists(String name){
+        facade.addEvent(createAddEventRequest(name));
+    }
+
+    private AddEventRequest createAddEventRequest(String name){
+        return AddEventRequest.builder()
+                .name(name)
+                .description("Test description")
+                .startDate(Instant.now())
+                .endDate(Instant.now())
+                .city("Test city")
+                .location("Test location")
+                .build();
+    }
 }

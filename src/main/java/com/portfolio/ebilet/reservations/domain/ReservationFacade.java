@@ -4,6 +4,8 @@ import com.portfolio.ebilet.reservations.domain.dto.AddEventRequest;
 import com.portfolio.ebilet.reservations.domain.dto.EventDto;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class ReservationFacade {
     private final ReservationRepository reservationRepository;
@@ -18,4 +20,10 @@ public class ReservationFacade {
         return eventMapper.mapToDto(event);
     }
 
+    public List<EventDto> getAllEvents() {
+        return eventRepository.findAll()
+                .stream()
+                .map(eventMapper::mapToDto)
+                .toList();
+    }
 }
