@@ -4,12 +4,14 @@ import com.portfolio.ebilet.reservations.domain.dto.AddEventRequest;
 import com.portfolio.ebilet.reservations.domain.dto.EventDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 class EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
@@ -20,6 +22,7 @@ class EventService {
         return eventMapper.mapToDto(event);
     }
 
+    @Transactional(readOnly = true)
     public List<EventDto> getAllEvents() {
         return eventRepository.findAll()
                 .stream()
@@ -27,6 +30,7 @@ class EventService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public EventDto getEvent(UUID uuid) {
         var event = getEventOrThrow(uuid);
         return eventMapper.mapToDto(event);
