@@ -1,5 +1,6 @@
 package com.portfolio.ebilet.reservations.domain;
 
+import com.portfolio.ebilet.reservations.SeatType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,37 +9,35 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-
-import java.math.BigDecimal;
 
 @Entity
-@Table(name = "seats")
+@Table(name = "sectors")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder
-public class Seat extends BaseEntity {
+class Sector extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_sector_id", nullable = false)
-    private EventSector eventSector;
+    @Column(nullable = false)
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SeatStatus status;
+    private SeatType sectorType;
 
-    // SEATED
-    private Integer rowNumber;
-    private Integer seatNumber;
+    // IF SEATED (shouldn't be null):
+    private Integer rowsCount;
+    private Integer seatsPerRow;
 
-    // STANDING
-    private Integer availableCount;
+    // IF STANDING (shouldn't be null):
+    private Integer maxCapacity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 }

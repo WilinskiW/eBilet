@@ -2,6 +2,9 @@ package com.portfolio.ebilet.reservations.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -34,20 +37,14 @@ class Event extends BaseEntity{
     @NotNull
     private Instant endDate;
 
-    @Column(nullable = false)
-    @NotNull
-    private String city;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
-    @Column(nullable = false)
-    @NotNull
-    private String location;
-
-    public void updateDetails(String name, String description, Instant start, Instant end, String city, String location) {
+    public void updateDetails(String name, String description, Instant start, Instant end) {
         this.name = name;
         this.description = description;
         this.startDate = start;
         this.endDate = end;
-        this.city = city;
-        this.location = location;
     }
 }

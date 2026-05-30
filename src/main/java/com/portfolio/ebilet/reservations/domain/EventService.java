@@ -48,15 +48,13 @@ class EventService {
     }
 
     public EventDto updateEvent(EventDto dto) {
-        var event = getEventOrThrow(UUID.fromString(dto.id()));
+        var event = getEventOrThrow(UUID.fromString(dto.name()));
 
         event.updateDetails(
                 dto.name(),
                 dto.description(),
                 dto.startDate(),
-                dto.endDate(),
-                dto.city(),
-                dto.location()
+                dto.endDate()
         );
 
         return eventMapper.mapToDto(event);

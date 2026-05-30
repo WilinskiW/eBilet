@@ -3,15 +3,15 @@ package com.portfolio.ebilet.reservations.domain.dto;
 import lombok.Builder;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Builder
 public record EventDto(
-        String id,
+        UUID id,
         String name,
         String description,
         Instant startDate,
         Instant endDate,
-        String city,
-        String location
+        LocationDto location
 ) {
 }

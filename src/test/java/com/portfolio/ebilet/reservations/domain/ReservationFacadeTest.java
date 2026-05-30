@@ -29,8 +29,6 @@ public class ReservationFacadeTest {
                 .description("Test description")
                 .startDate(Instant.now())
                 .endDate(Instant.now())
-                .city("Test city")
-                .location("Test location")
                 .build();
     }
 
@@ -45,8 +43,6 @@ public class ReservationFacadeTest {
                     .description("Test description")
                     .startDate(Instant.now())
                     .endDate(Instant.now())
-                    .city("Test city")
-                    .location("Test location")
                     .build();
 
             // When
@@ -59,7 +55,6 @@ public class ReservationFacadeTest {
                     .matches(e -> e.description().equals("Test description"))
                     .matches(e -> e.startDate().equals(request.startDate()))
                     .matches(e -> e.endDate().equals(request.endDate()))
-                    .matches(e -> e.city().equals("Test city"))
                     .matches(e -> e.location().equals("Test location"));
         }
 
@@ -88,7 +83,7 @@ public class ReservationFacadeTest {
             var targetEvent = givenEventExists("Test concert");
 
             // When
-            var event = facade.getEvent(UUID.fromString(targetEvent.id()));
+            var event = facade.getEvent(targetEvent.id());
 
             // Then
             assertThat(event).isEqualTo(targetEvent);
@@ -113,7 +108,7 @@ public class ReservationFacadeTest {
             var targetEvent = givenEventExists("Test concert");
 
             // When
-            facade.deleteEvent(UUID.fromString(targetEvent.id()));
+            facade.deleteEvent(targetEvent.id());
 
             // Then
             assertThat(facade.getAllEvents()).isEmpty();
@@ -142,8 +137,6 @@ public class ReservationFacadeTest {
                     .description("Modified description")
                     .startDate(Instant.now())
                     .endDate(Instant.now())
-                    .city(targetEvent.city())
-                    .location(targetEvent.location())
                     .build();
 
             // When
@@ -154,9 +147,7 @@ public class ReservationFacadeTest {
                     .hasFieldOrPropertyWithValue("name", "Modified concert")
                     .hasFieldOrPropertyWithValue("description", "Modified description")
                     .hasFieldOrPropertyWithValue("startDate", updateRequest.startDate())
-                    .hasFieldOrPropertyWithValue("endDate", updateRequest.endDate())
-                    .hasFieldOrPropertyWithValue("city", "Test city")
-                    .hasFieldOrPropertyWithValue("location", "Test location");
+                    .hasFieldOrPropertyWithValue("endDate", updateRequest.endDate());
         }
     }
 }
