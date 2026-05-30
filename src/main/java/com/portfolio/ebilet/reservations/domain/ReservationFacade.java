@@ -34,4 +34,11 @@ public class ReservationFacade {
         );
         return eventMapper.mapToDto(event);
     }
+
+    public void deleteEvent(UUID uuid) {
+        var event = eventRepository.findById(uuid).orElseThrow(
+                () -> new EventNotFoundException(uuid.toString())
+        );
+        eventRepository.delete(event);
+    }
 }

@@ -102,4 +102,16 @@ public class ReservationFacadeTest {
                 .isInstanceOf(EventNotFoundException.class)
                 .hasMessage(String.format("Event with ID: %s not found", uuid));
     }
+
+    @Test
+    void should_delete_event(){
+        // Given
+        var targetEvent = facade.addEvent(createAddEventRequest("Test concert"));
+
+        // When
+        facade.deleteEvent(UUID.fromString(targetEvent.id()));
+
+        // Then
+        assertThat(facade.getAllEvents()).isEmpty();
+    }
 }

@@ -151,7 +151,7 @@ public class InMemoryEventRepository implements EventRepository{
 
     @Override
     public void delete(Event entity) {
-
+        events.remove(entity.getId());
     }
 
     @Override
