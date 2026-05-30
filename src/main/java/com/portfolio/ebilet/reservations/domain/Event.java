@@ -41,4 +41,13 @@ class Event extends BaseEntity{
     @Column(nullable = false)
     @NotNull
     private String location;
+
+    public void updateDetails(String name, String description, Instant start, Instant end, String city, String location) {
+        this.name = name;
+        this.description = description;
+        this.startDate = start;
+        this.endDate = end;
+        this.city = city;
+        this.location = location;
+    }
 }

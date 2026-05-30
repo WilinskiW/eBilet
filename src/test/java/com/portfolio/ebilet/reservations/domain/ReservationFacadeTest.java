@@ -13,16 +13,27 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ReservationFacadeTest {
     private final ReservationFacade facade = createFacade();
 
-    static ReservationFacade createFacade(){
-        return new ReservationFacade(null,
-                new InMemoryEventRepository(),
-                null,
-                new EventMapperImpl()
-                );
+    static ReservationFacade createFacade() {
+        return new ReservationFacade(new EventService(new InMemoryEventRepository(), new EventMapperImpl()));
+    }
+
+    private EventDto givenEventExists(String name) {
+        return facade.addEvent(createAddEventRequest(name));
+    }
+
+    private AddEventRequest createAddEventRequest(String name) {
+        return AddEventRequest.builder()
+                .name(name)
+                .description("Test description")
+                .startDate(Instant.now())
+                .endDate(Instant.now())
+                .city("Test city")
+                .location("Test location")
+                .build();
     }
 
     @Test
-    void should_add_new_event_if_it_doesnt_exist(){
+    void should_add_new_event_if_it_doesnt_exist() {
         // Given
         var request = AddEventRequest.builder()
                 .name("Test concert")
@@ -48,7 +59,7 @@ public class ReservationFacadeTest {
     }
 
     @Test
-    void should_get_all_events(){
+    void should_get_all_events() {
         // Given
         givenEventExists("Test concert 1");
         givenEventExists("Test concert 2");
@@ -64,26 +75,10 @@ public class ReservationFacadeTest {
                 .containsExactlyInAnyOrder("Test concert 1", "Test concert 2", "Test concert 3");
     }
 
-    private void givenEventExists(String name){
-        facade.addEvent(createAddEventRequest(name));
-    }
-
-    private AddEventRequest createAddEventRequest(String name){
-        return AddEventRequest.builder()
-                .name(name)
-                .description("Test description")
-                .startDate(Instant.now())
-                .endDate(Instant.now())
-                .city("Test city")
-                .location("Test location")
-                .build();
-    }
-
-
     @Test
-    void should_get_event_by_id(){
+    void should_get_event_by_id() {
         // Given
-        var targetEvent = facade.addEvent(createAddEventRequest("Test concert"));
+        var targetEvent = givenEventExists("Test concert");
 
         // When
         var event = facade.getEvent(UUID.fromString(targetEvent.id()));
@@ -93,7 +88,7 @@ public class ReservationFacadeTest {
     }
 
     @Test
-    void should_throw_exception_if_event_not_found_while_searching_by_id(){
+    void should_throw_exception_if_event_not_found_while_searching_by_id() {
         // Given
         UUID uuid = UUID.randomUUID();
 
@@ -104,9 +99,9 @@ public class ReservationFacadeTest {
     }
 
     @Test
-    void should_delete_event(){
+    void should_delete_event() {
         // Given
-        var targetEvent = facade.addEvent(createAddEventRequest("Test concert"));
+        var targetEvent = givenEventExists("Test concert");
 
         // When
         facade.deleteEvent(UUID.fromString(targetEvent.id()));
@@ -116,7 +111,7 @@ public class ReservationFacadeTest {
     }
 
     @Test
-    void should_throw_exception_if_event_not_found_while_deleting(){
+    void should_throw_exception_if_event_not_found_while_deleting() {
         // Given
         UUID uuid = UUID.randomUUID();
 
@@ -124,5 +119,32 @@ public class ReservationFacadeTest {
         assertThatThrownBy(() -> facade.deleteEvent(uuid))
                 .isInstanceOf(EventNotFoundException.class)
                 .hasMessage(String.format("Event with ID: %s not found", uuid));
+    }
+
+    @Test
+    void should_update_event_if_it_exists() {
+        // Given
+        var targetEvent = givenEventExists("Test concert");
+        var updateRequest = EventDto.builder()
+                .id(targetEvent.id())
+                .name("Modified concert")
+                .description("Modified description")
+                .startDate(Instant.now())
+                .endDate(Instant.now())
+                .city(targetEvent.city())
+                .location(targetEvent.location())
+                .build();
+
+        // When
+        var updatedEvent = facade.updateEvent(updateRequest);
+
+        // Then
+        assertThat(updatedEvent)
+                .hasFieldOrPropertyWithValue("name", "Modified concert")
+                .hasFieldOrPropertyWithValue("description", "Modified description")
+                .hasFieldOrPropertyWithValue("startDate", updateRequest.startDate())
+                .hasFieldOrPropertyWithValue("endDate", updateRequest.endDate())
+                .hasFieldOrPropertyWithValue("city", "Test city")
+                .hasFieldOrPropertyWithValue("location", "Test location");
     }
 }

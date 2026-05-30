@@ -9,36 +9,25 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ReservationFacade {
-    private final ReservationRepository reservationRepository;
-    private final EventRepository eventRepository;
-    private final SeatRepository seatRepository;
-    private final EventMapper eventMapper;
-
+    private final EventService eventService;
 
     public EventDto addEvent(AddEventRequest request) {
-        var event = eventMapper.mapRequestToEntity(request);
-        event = eventRepository.save(event);
-        return eventMapper.mapToDto(event);
+        return eventService.addEvent(request);
     }
 
     public List<EventDto> getAllEvents() {
-        return eventRepository.findAll()
-                .stream()
-                .map(eventMapper::mapToDto)
-                .toList();
+        return eventService.getAllEvents();
     }
 
     public EventDto getEvent(UUID uuid) {
-        var event = eventRepository.findById(uuid).orElseThrow(
-                () -> new EventNotFoundException(uuid.toString())
-        );
-        return eventMapper.mapToDto(event);
+        return eventService.getEvent(uuid);
     }
 
     public void deleteEvent(UUID uuid) {
-        var event = eventRepository.findById(uuid).orElseThrow(
-                () -> new EventNotFoundException(uuid.toString())
-        );
-        eventRepository.delete(event);
+        eventService.deleteEvent(uuid);
+    }
+
+    public EventDto updateEvent(EventDto dto) {
+        return eventService.updateEvent(dto);
     }
 }
