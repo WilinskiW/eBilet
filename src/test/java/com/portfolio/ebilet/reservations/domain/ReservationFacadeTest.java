@@ -93,7 +93,7 @@ public class ReservationFacadeTest {
     }
 
     @Test
-    void should_throw_exception_if_event_not_found(){
+    void should_throw_exception_if_event_not_found_while_searching_by_id(){
         // Given
         UUID uuid = UUID.randomUUID();
 
@@ -113,5 +113,16 @@ public class ReservationFacadeTest {
 
         // Then
         assertThat(facade.getAllEvents()).isEmpty();
+    }
+
+    @Test
+    void should_throw_exception_if_event_not_found_while_deleting(){
+        // Given
+        UUID uuid = UUID.randomUUID();
+
+        // When & Then
+        assertThatThrownBy(() -> facade.deleteEvent(uuid))
+                .isInstanceOf(EventNotFoundException.class)
+                .hasMessage(String.format("Event with ID: %s not found", uuid));
     }
 }
