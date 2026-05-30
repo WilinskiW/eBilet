@@ -5,6 +5,7 @@ import com.portfolio.ebilet.reservations.domain.dto.EventDto;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ReservationFacade {
@@ -25,5 +26,12 @@ public class ReservationFacade {
                 .stream()
                 .map(eventMapper::mapToDto)
                 .toList();
+    }
+
+    public EventDto getEvent(UUID uuid) {
+        var event = eventRepository.findById(uuid).orElseThrow(
+                () -> new EventNotFoundException(uuid.toString())
+        );
+        return eventMapper.mapToDto(event);
     }
 }

@@ -103,7 +103,9 @@ public class InMemoryEventRepository implements EventRepository{
 
     @Override
     public <S extends Event> S save(S entity) {
-        events.put(generateUUIDv7(), entity);
+        UUID uuid = generateUUIDv7();
+        entity.setId(uuid);
+        events.put(uuid, entity);
         return entity;
     }
 
@@ -114,7 +116,10 @@ public class InMemoryEventRepository implements EventRepository{
 
     @Override
     public Optional<Event> findById(UUID uuid) {
-        return Optional.empty();
+        return events.values()
+                .stream()
+                .filter(event -> event.getId().equals(uuid))
+                .findFirst();
     }
 
     @Override

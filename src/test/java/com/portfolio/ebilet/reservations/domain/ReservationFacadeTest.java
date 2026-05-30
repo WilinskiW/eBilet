@@ -5,8 +5,10 @@ import com.portfolio.ebilet.reservations.domain.dto.EventDto;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ReservationFacadeTest {
     private final ReservationFacade facade = createFacade();
@@ -75,5 +77,29 @@ public class ReservationFacadeTest {
                 .city("Test city")
                 .location("Test location")
                 .build();
+    }
+
+
+    @Test
+    void should_get_event_by_id(){
+        // Given
+        var targetEvent = facade.addEvent(createAddEventRequest("Test concert"));
+
+        // When
+        var event = facade.getEvent(UUID.fromString(targetEvent.id()));
+
+        // Then
+        assertThat(event).isEqualTo(targetEvent);
+    }
+
+    @Test
+    void should_throw_exception_if_event_not_found(){
+        // Given
+        UUID uuid = UUID.randomUUID();
+
+        // When & Then
+        assertThatThrownBy(() -> facade.getEvent(uuid))
+                .isInstanceOf(EventNotFoundException.class)
+                .hasMessage(String.format("Event with ID: %s not found", uuid));
     }
 }
