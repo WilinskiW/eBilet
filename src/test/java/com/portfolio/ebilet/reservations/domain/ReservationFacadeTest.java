@@ -105,83 +105,34 @@ public class ReservationFacadeTest {
                     .hasMessage(String.format("Event with ID: %s not found", uuid));
         }
 
-        @Test
-        @DisplayName("Should delete event")
-        void should_delete_event() {
-            // Given
-            var targetEvent = givenEventExists("Test concert");
-
-            // When
-            facade.deleteEvent(targetEvent.id());
-
-            // Then
-            assertThat(facade.getAllEvents()).isEmpty();
+        private LocationDto givenLocationExists(String name) {
+            return facade.createLocation(createLocationRequest(name));
         }
 
-        @Test
-        @DisplayName("Should throw exception if event not found while deleting")
-        void should_throw_exception_if_event_not_found_while_deleting() {
-            // Given
-            UUID uuid = UUID.randomUUID();
-
-            // When & Then
-            assertThatThrownBy(() -> facade.deleteEvent(uuid))
-                    .isInstanceOf(EventNotFoundException.class)
-                    .hasMessage(String.format("Event with ID: %s not found", uuid));
-        }
-
-        @Test
-        @DisplayName("Should update event if it exists")
-        void should_update_event_if_it_exists() {
-            // Given
-            var targetEvent = givenEventExists("Test concert");
-            var updateRequest = EventDto.builder()
-                    .id(targetEvent.id())
-                    .name("Modified concert")
-                    .description("Modified description")
-                    .startDate(Instant.now())
-                    .endDate(Instant.now())
+        private AddLocationRequest createLocationRequest(String name) {
+            return AddLocationRequest.builder()
+                    .name(name)
+                    .city("Test city")
+                    .address("Test address")
+                    .country("Test country")
                     .build();
+        }
+
+        @Test
+        void should_create_location_if_not_exists() {
+            // Given
+            var request = createLocationRequest("Test location");
 
             // When
-            var updatedEvent = facade.updateEvent(updateRequest);
+            var location = facade.createLocation(request);
 
             // Then
-            assertThat(updatedEvent)
-                    .hasFieldOrPropertyWithValue("name", "Modified concert")
-                    .hasFieldOrPropertyWithValue("description", "Modified description")
-                    .hasFieldOrPropertyWithValue("startDate", updateRequest.startDate())
-                    .hasFieldOrPropertyWithValue("endDate", updateRequest.endDate());
+            assertThat(location)
+                    .hasFieldOrProperty("id")
+                    .matches(l -> l.name().equals("Test location"))
+                    .matches(l -> l.city().equals("Test city"))
+                    .matches(l -> l.address().equals("Test address"))
+                    .matches(l -> l.country().equals("Test country"));
         }
-    }
-
-    private LocationDto givenLocationExists(String name){
-        return facade.createLocation(createLocationRequest(name));
-    }
-
-    private AddLocationRequest createLocationRequest(String name){
-        return AddLocationRequest.builder()
-                .name(name)
-                .city("Test city")
-                .address("Test address")
-                .country("Test country")
-                .build();
-    }
-
-    @Test
-    void should_create_location_if_not_exists(){
-        // Given
-        var request = createLocationRequest("Test location");
-
-        // When
-        var location = facade.createLocation(request);
-
-        // Then
-        assertThat(location)
-                .hasFieldOrProperty("id")
-                .matches(l -> l.name().equals("Test location"))
-                .matches(l -> l.city().equals("Test city"))
-                .matches(l -> l.address().equals("Test address"))
-                .matches(l -> l.country().equals("Test country"));
     }
 }

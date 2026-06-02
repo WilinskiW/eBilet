@@ -41,22 +41,4 @@ class EventService {
                 () -> new EventNotFoundException(uuid.toString())
         );
     }
-
-    public void deleteEvent(UUID uuid) {
-        var event = getEventOrThrow(uuid);
-        eventRepository.delete(event);
-    }
-
-    public EventDto updateEvent(EventDto dto) {
-        var event = getEventOrThrow(dto.id());
-
-        event.updateDetails(
-                dto.name(),
-                dto.description(),
-                dto.startDate(),
-                dto.endDate()
-        );
-
-        return eventMapper.mapToDto(event);
-    }
 }

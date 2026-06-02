@@ -26,14 +26,6 @@ public class ReservationFacade {
         return eventService.getEvent(uuid);
     }
 
-    public void deleteEvent(UUID uuid) {
-        eventService.deleteEvent(uuid);
-    }
-
-    public EventDto updateEvent(EventDto dto) {
-        return eventService.updateEvent(dto);
-    }
-
     public LocationDto createLocation(AddLocationRequest request){
         return locationService.createLocation(request);
     }
