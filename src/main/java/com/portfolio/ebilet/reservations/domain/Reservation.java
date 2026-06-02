@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "reservations")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
 @Setter(AccessLevel.PACKAGE)
 class Reservation extends BaseEntity {

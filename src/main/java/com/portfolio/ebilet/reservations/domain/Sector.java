@@ -1,6 +1,5 @@
 package com.portfolio.ebilet.reservations.domain;
 
-import com.portfolio.ebilet.reservations.SeatType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,4 +39,7 @@ class Sector extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
+
+    @Column(nullable = false)
+    private String tags;
 }
