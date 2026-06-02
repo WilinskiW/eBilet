@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-public abstract class InMemoryBaseRepository <T extends Identifiable> implements JpaRepository<T, UUID> {
+public abstract class InMemoryBaseRepository <T extends BaseEntity> implements JpaRepository<T, UUID> {
     protected final Map<UUID, T> storage = new HashMap<>();
 
     protected UUID generateUUIDv7() {

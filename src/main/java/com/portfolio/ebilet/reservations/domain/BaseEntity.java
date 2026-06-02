@@ -26,7 +26,7 @@ import java.util.UUID;
 @SuperBuilder
 @Setter(value = AccessLevel.PROTECTED)
 @Getter
-public abstract class BaseEntity implements Identifiable{
+public abstract class BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id = Generators.timeBasedEpochGenerator().generate(); // v7
@@ -42,9 +42,4 @@ public abstract class BaseEntity implements Identifiable{
     @LastModifiedDate
     @Column(nullable = false)
     private Instant updatedAt;
-
-    @Override
-    public void setId(UUID id) {
-        this.id = id;
-    }
 }
