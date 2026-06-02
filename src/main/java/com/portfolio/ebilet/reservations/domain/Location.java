@@ -6,10 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,8 @@ import java.util.List;
 @Entity
 @Table(name = "locations")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SuperBuilder
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder
 @Getter
 class Location extends BaseEntity {
     @Column(nullable = false, unique = true)

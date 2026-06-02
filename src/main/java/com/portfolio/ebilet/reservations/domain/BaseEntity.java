@@ -8,7 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,8 +22,11 @@ import java.util.UUID;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuperBuilder
+@Setter(value = AccessLevel.PROTECTED)
 @Getter
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id = Generators.timeBasedEpochGenerator().generate(); // v7
@@ -35,4 +42,9 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column(nullable = false)
     private Instant updatedAt;
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
+    }
 }

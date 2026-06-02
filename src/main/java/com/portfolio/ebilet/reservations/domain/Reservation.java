@@ -10,14 +10,16 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "reservations")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SuperBuilder
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder
 @Setter(AccessLevel.PACKAGE)
 class Reservation extends BaseEntity {
 

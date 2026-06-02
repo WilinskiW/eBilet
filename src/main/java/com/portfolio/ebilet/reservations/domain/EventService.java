@@ -48,7 +48,7 @@ class EventService {
     }
 
     public EventDto updateEvent(EventDto dto) {
-        var event = getEventOrThrow(UUID.fromString(dto.name()));
+        var event = getEventOrThrow(dto.id());
 
         event.updateDetails(
                 dto.name(),

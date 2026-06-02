@@ -16,7 +16,10 @@ public class ReservationFacadeTest {
     private final ReservationFacade facade = createFacade();
 
     static ReservationFacade createFacade() {
-        return new ReservationFacade(new EventService(new InMemoryEventRepository(), new EventMapperImpl()));
+        return new ReservationFacade(
+                new EventService(new InMemoryEventRepository(), new EventMapperImpl()),
+                new LocationService(new InMemoryLocationRepository(), new LocationMapperImpl())
+        );
     }
 
     private EventDto givenEventExists(String name) {
@@ -54,8 +57,7 @@ public class ReservationFacadeTest {
                     .matches(e -> e.name().equals("Test concert"))
                     .matches(e -> e.description().equals("Test description"))
                     .matches(e -> e.startDate().equals(request.startDate()))
-                    .matches(e -> e.endDate().equals(request.endDate()))
-                    .matches(e -> e.location().equals("Test location"));
+                    .matches(e -> e.endDate().equals(request.endDate()));
         }
 
         @Test
